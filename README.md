@@ -4,6 +4,15 @@ Diagnosing and repairing executable-but-wrong Python/Gurobi optimization formula
 
 **Final report:** [Read the complete final report (PDF)](final-report.pdf) for the full methodology, result tables, and evaluation analysis.
 
+Python | Gurobi | LLM-based code repair | Semantic feedback | LogiOR evaluation
+
+## At a Glance
+
+- **Problem:** executable Python/Gurobi code can still encode the wrong optimization formulation.
+- **Contribution:** semantic diagnosis is passed into iterative code repair as additional feedback context.
+- **Evaluation:** retained, protocol-labelled 92-problem LogiOR results cover execution-only, advisory, adaptive, and specification-first strategies.
+- **Reproducibility:** public unit tests and an offline synthetic dry run are available; full experiments require external data, Gurobi, and API credentials.
+
 ## Problem
 
 LLMs can generate Python/Gurobi code that runs successfully but encodes the wrong mathematical optimization model. Execution feedback can catch syntax errors, runtime errors, solver failures, and objective mismatches, but it often cannot explain which variable, constraint, flow relation, or objective term is semantically wrong.
@@ -12,22 +21,28 @@ LLMs can generate Python/Gurobi code that runs successfully but encodes the wron
 
 This project studies semantic diagnosis as repair context. A separate advisor model reads the original problem and candidate code, identifies likely formulation errors, and passes that diagnosis into the next repair prompt. The advisor does not serve as a formal verifier and does not prove correctness.
 
+![Semantic feedback repair pipeline](release_results/figures/pipeline_diagram.png)
+
+*Semantic-feedback repair loop, including the specification-first planning path and adaptive-compression variant.*
+
+Candidate code is executed and analyzed. An advisor identifies likely formulation-level errors, and its diagnosis becomes repair context for the next iteration.
+
 ## Methods Compared
 
-The final public configs compare four repair strategies:
+The final public [configs](configs/final/) compare four repair strategies:
 
 | Config | Method |
 | --- | --- |
-| `configs/final/baseline_exec_only.yaml` | Execution-only repair baseline |
-| `configs/final/advisory_diagnosis_only_gpt5_short.yaml` | Direct semantic advisory |
-| `configs/final/advisory_diagnosis_only_gpt5_short_adaptive_compressed.yaml` | Adaptive compressed advisory |
-| `configs/final/spec_then_code.yaml` | Formulation spec before code generation |
+| [`baseline_exec_only.yaml`](configs/final/baseline_exec_only.yaml) | Execution-only repair baseline |
+| [`advisory_diagnosis_only_gpt5_short.yaml`](configs/final/advisory_diagnosis_only_gpt5_short.yaml) | Direct semantic advisory |
+| [`advisory_diagnosis_only_gpt5_short_adaptive_compressed.yaml`](configs/final/advisory_diagnosis_only_gpt5_short_adaptive_compressed.yaml) | Adaptive compressed advisory |
+| [`spec_then_code.yaml`](configs/final/spec_then_code.yaml) | Formulation spec before code generation |
 
 A separate cross-difficulty study in the final report evaluates semantic advisory across generator/advisor capability and problem difficulty.
 
 ## Results
 
-The complete results, protocols, and analysis are in the [final report](final-report.pdf). The retained result summaries live in `release_results/`; raw run directories are excluded.
+The complete results, protocols, and analysis are in the [final report](final-report.pdf). The retained, protocol-labelled summaries live in [release_results/](release_results/), including [final_results.md](release_results/final_results.md); raw run directories are excluded.
 
 ### Experiment 1: Cross-Difficulty Semantic Advisory Study
 
@@ -53,6 +68,17 @@ Protocol: LogiOR, 92 problems, two-round repair horizon.
 | `spec_then_code` | 44/92 | 0.478 |
 
 These protocols are different and should not be merged into one leaderboard.
+
+![Solved LogiOR instances across retained experiments](release_results/figures/full92_solved_counts.png)
+
+*Experiment 2 only: final four-method comparison on 92 LogiOR problems with a two-round repair horizon. It is not a combined leaderboard with the five-round cross-difficulty study above.*
+
+## Key Engineering Contributions
+
+- **Configuration-driven strategies:** [`scripts/run_pilot.py`](scripts/run_pilot.py) runs the public repair strategies defined in [configs/final/](configs/final/).
+- **Standalone dataset interface:** the public [src/](src/) code accepts `LOGIOR_DATASET_ROOT` or `--dataset-root` without depending on the original parent repository layout; see [data/README.md](data/README.md).
+- **Offline release check:** [`configs/smoke/offline_synthetic.yaml`](configs/smoke/offline_synthetic.yaml) supports a synthetic `--dry-run` path without Gurobi, benchmark data, or model API calls.
+- **Curated public evidence:** [tests/](tests/) and [release_results/](release_results/) retain a focused test suite and human-readable evidence snapshot while excluding raw outputs and credentials.
 
 ## Repository Layout
 
@@ -124,7 +150,7 @@ Local solver-backed and full benchmark runs require additional setup. Do not exp
 
 ## Dataset And Gurobi Setup
 
-The LogiOR benchmark data is not included. Provide a local dataset path with either:
+The LogiOR benchmark data is not included. See [data/README.md](data/README.md) for access and licensing guidance, then provide a local dataset path with either:
 
 ```bash
 export LOGIOR_DATASET_ROOT=/absolute/path/to/LogiOR
@@ -153,7 +179,7 @@ cp .env.example .env
 
 ## Reproducibility
 
-The final comparison configs are in `configs/final/`. They are configured for LogiOR, 92 problems, masked expected objectives, and a two-round repair horizon.
+The final comparison [configs](configs/final/) are configured for LogiOR, 92 problems, masked expected objectives, and a two-round repair horizon.
 
 Example full API-backed command after credentials, Gurobi, and data are configured:
 
