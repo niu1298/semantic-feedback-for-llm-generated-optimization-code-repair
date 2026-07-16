@@ -1,0 +1,36 @@
+problem_source: orthought
+dataset_name: logior
+problem_limit: 92
+experiment_name: v3_full92_candidate_advisory_diagnosis_only_gpt5_short
+strategy: semantic_advisory_execution
+llm_provider: openai
+llm_model: gpt-4o-mini
+semantic_provider: openai
+semantic_model: gpt-5-mini
+request_timeout_seconds: 90
+max_retries: 0
+max_tokens: 2048
+semantic_max_tokens: 4096
+semantic_prompt_style: compact
+reasoning_effort: low
+temperature: 0.0
+thinking: default
+output_dir: outputs/final/raw_runs
+max_rounds: 2
+semantic_threshold: 0.5
+solver_timeout_seconds: 30
+use_expected_objective_in_repair: true
+mask_expected_objective: true
+advisory_mode: diagnosis_only
+static_checks_enabled: true
+include_static_checks_in_advisor_prompt: true
+include_static_checks_in_repair_prompt: true
+include_semantic_diagnosis_in_repair_prompt: true
+include_execution_feedback_in_repair_prompt: true
+convergence_logging_enabled: true
+use_formulation_spec: false
+use_code_to_spec: false
+use_spec_comparison_diagnosis: false
+semantic_diagnosis_sources:
+  - direct_code
+compress_semantic_feedback: false

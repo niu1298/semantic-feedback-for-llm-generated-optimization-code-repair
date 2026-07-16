@@ -1,0 +1,10 @@
+PyYAML>=6.0
+pytest>=8.0
+openai>=1.0.0
+python-dotenv>=1.0.0
+pandas>=2.0
+numpy>=1.24
+matplotlib>=3.8
+pydantic>=2.0
+openpyxl>=3.1
+gurobipy>=11.0

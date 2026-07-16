@@ -1,0 +1,25 @@
+problem_source: synthetic
+dataset_name: synthetic
+problem_limit: 2
+problem_ids:
+  - synthetic_capacity
+  - synthetic_flow
+experiment_name: offline_synthetic_smoke
+strategy: execution_only
+llm_provider: offline
+llm_model: no-api
+semantic_provider: null
+semantic_model: null
+request_timeout_seconds: 1
+max_retries: 0
+max_tokens: 16
+temperature: 0.0
+thinking: default
+output_dir: outputs/smoke
+max_rounds: 1
+solver_timeout_seconds: 5
+use_expected_objective_in_repair: false
+mask_expected_objective: true
+static_checks_enabled: true
+include_execution_feedback_in_repair_prompt: true
+convergence_logging_enabled: false
