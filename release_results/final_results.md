@@ -35,4 +35,4 @@ Interpretation: direct semantic advisory produced the strongest final comparison
 - Band breakdown: `full92_candidate_band_breakdown.md`.
 - Solve overlap: `full92_candidate_solve_overlap.md`.
 - Cost tradeoff: `full92_candidate_cost_tradeoff.md`.
-- Full writeup: `docs/final-report.pdf`.
+- Full writeup: `../final-report.pdf`.

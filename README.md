@@ -2,6 +2,8 @@
 
 Diagnosing and repairing executable-but-wrong Python/Gurobi optimization formulations with LLM semantic feedback.
 
+**Final report:** [Read the complete final report (PDF)](final-report.pdf) for the full methodology, result tables, and evaluation analysis.
+
 ## Problem
 
 LLMs can generate Python/Gurobi code that runs successfully but encodes the wrong mathematical optimization model. Execution feedback can catch syntax errors, runtime errors, solver failures, and objective mismatches, but it often cannot explain which variable, constraint, flow relation, or objective term is semantically wrong.
@@ -25,7 +27,7 @@ A separate cross-difficulty study in the final report evaluates semantic advisor
 
 ## Results
 
-The retained result summaries live in `release_results/`. Raw run directories are excluded.
+The complete results, protocols, and analysis are in the [final report](final-report.pdf). The retained result summaries live in `release_results/`; raw run directories are excluded.
 
 ### Experiment 1: Cross-Difficulty Semantic Advisory Study
 
@@ -58,6 +60,7 @@ These protocols are different and should not be merged into one leaderboard.
 .
 ├── README.md
 ├── LICENSE
+├── final-report.pdf
 ├── .env.example
 ├── requirements.txt
 ├── src/
@@ -70,8 +73,6 @@ These protocols are different and should not be merged into one leaderboard.
 │   ├── README.md
 │   ├── final_results.md
 │   └── figures/
-├── docs/
-│   └── final-report.pdf
 └── data/
     └── README.md
 ```
@@ -168,7 +169,7 @@ Semantic advisory can improve repair context, but it is not formal verification.
 
 ## Final Report
 
-The full report is available at `docs/final-report.pdf`.
+[Read the complete final report (PDF)](final-report.pdf).
 
 ## Course Provenance
 
