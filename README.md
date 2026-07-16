@@ -21,9 +21,28 @@ LLMs can generate Python/Gurobi code that runs successfully but encodes the wron
 
 This project studies semantic diagnosis as repair context. A separate advisor model reads the original problem and candidate code, identifies likely formulation errors, and passes that diagnosis into the next repair prompt. The advisor does not serve as a formal verifier and does not prove correctness.
 
-![Semantic feedback repair pipeline](release_results/figures/pipeline_diagram.png)
+```mermaid
+%%{init: {"flowchart": {"curve": "stepAfter"}}}%%
+flowchart LR
+    P[Optimization problem] --> G[Generate or repair code]
+    G --> E[Execute and evaluate]
+    E --> F[Execution feedback]
+    F --> R[Repair context]
+    R --> G
+    G -. optional .-> D[Semantic diagnosis]
+    D -. optional .-> R
 
-*Semantic-feedback repair loop, including the specification-first planning path and adaptive-compression variant.*
+    classDef core fill:#E8F0FE,stroke:#2F6FDB,color:#172033,stroke-width:1.5px;
+    classDef feedback fill:#E7F6EC,stroke:#3D8A52,color:#172033,stroke-width:1.5px;
+    classDef optional fill:#FFF7E3,stroke:#B7791F,color:#172033,stroke-width:1.5px,stroke-dasharray: 5 4;
+    class P,G,E,R core;
+    class F feedback;
+    class D optional;
+```
+
+In the specification-first variant, the system drafts a formulation plan before the initial code-generation step.
+
+*Core semantic-feedback repair loop. Dashed elements are optional method variants.*
 
 Candidate code is executed and analyzed. An advisor identifies likely formulation-level errors, and its diagnosis becomes repair context for the next iteration.
 
